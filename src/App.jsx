@@ -1,6 +1,8 @@
 import { useSelector, useDispatch } from 'react-redux'
+import { useState } from 'react'
 
 const App = () => {
+  const [newAnecdote, setNewAnecdote] = useState('') // Reactin tila syötteen hallintaan
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
 
@@ -13,18 +15,20 @@ const App = () => {
 
   const createAnecdote = (event) => {
     event.preventDefault()
-    const content = event.target.anecdote.value
     dispatch({
       type: 'CREATE',
-      payload: { content }
+      payload: { content: newAnecdote }
     })
-    event.target.anecdote.value = '' // Tyhjennetään syötekenttä
+    setNewAnecdote('') // Tyhjennetään syötekenttä
   }
+
+  // Järjestä anekdootit äänien mukaan laskevaan järjestykseen
+  const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
   return (
     <div>
       <h2>Anecdotes</h2>
-      {anecdotes.map(anecdote =>
+      {sortedAnecdotes.map(anecdote =>
         <div key={anecdote.id}>
           <div>
             {anecdote.content}
@@ -37,7 +41,12 @@ const App = () => {
       )}
       <h2>create new</h2>
       <form onSubmit={createAnecdote}>
-        <div><input name="anecdote" /></div>
+        <div>
+          <input 
+            value={newAnecdote} 
+            onChange={(e) => setNewAnecdote(e.target.value)} 
+          />
+        </div>
         <button type="submit">create</button>
       </form>
     </div>
