@@ -1,28 +1,15 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useState } from 'react'
+import { voteAnecdote } from './reducers/anecdoteReducer'
+import AnecdoteForm from './AnecdoteForm'
 
 const App = () => {
-  const [newAnecdote, setNewAnecdote] = useState('') // Reactin tila syötteen hallintaan
   const anecdotes = useSelector(state => state)
   const dispatch = useDispatch()
 
   const vote = (id) => {
-    dispatch({
-      type: 'VOTE',
-      payload: { id }
-    })
+    dispatch(voteAnecdote(id)) // Käytetään action creator -funktiota
   }
 
-  const createAnecdote = (event) => {
-    event.preventDefault()
-    dispatch({
-      type: 'CREATE',
-      payload: { content: newAnecdote }
-    })
-    setNewAnecdote('') // Tyhjennetään syötekenttä
-  }
-
-  // Järjestä anekdootit äänien mukaan laskevaan järjestykseen
   const sortedAnecdotes = [...anecdotes].sort((a, b) => b.votes - a.votes)
 
   return (
@@ -39,16 +26,7 @@ const App = () => {
           </div>
         </div>
       )}
-      <h2>create new</h2>
-      <form onSubmit={createAnecdote}>
-        <div>
-          <input 
-            value={newAnecdote} 
-            onChange={(e) => setNewAnecdote(e.target.value)} 
-          />
-        </div>
-        <button type="submit">create</button>
-      </form>
+      <AnecdoteForm /> {/* Uusi komponentti anekdootin luomiseen */}
     </div>
   )
 }
