@@ -1,15 +1,17 @@
 import { useSelector } from 'react-redux'
 
 const Notification = () => {
-  const notification = useSelector(state => state.notification) // Ota notification reducerin tila käyttöön
+  const notification = useSelector(state => state.notification)
 
   const style = {
     border: 'solid',
     padding: 10,
-    borderWidth: 1
+    borderWidth: 1,
+    marginBottom: 10,
+    backgroundColor: '#e1f5fe',
+    color: '#0277bd'
   }
 
-  // Jos notification on tyhjä, ei renderöidä mitään
   if (!notification) {
     return null
   }
