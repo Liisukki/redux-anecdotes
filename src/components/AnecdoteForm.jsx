@@ -1,28 +1,35 @@
+import { useState } from 'react'
 import { useDispatch } from 'react-redux'
 import { createAnecdote } from '../reducers/anecdoteReducer'
-import { showNotification } from '../reducers/notificationReducer'
 
 const AnecdoteForm = () => {
+  const [content, setContent] = useState('')
   const dispatch = useDispatch()
 
-  const addAnecdote = (event) => {
+  const handleSubmit = (event) => {
     event.preventDefault()
-    const content = event.target.anecdote.value
-    event.target.anecdote.value = ''
-    dispatch(createAnecdote(content))
-    dispatch(showNotification(`you created '${content}'`))
+
+    if (content.trim() === '') return // Estetään tyhjän anekdootin lisääminen
+
+    dispatch(createAnecdote(content)) // Lähetetään anekdootti Reduxiin ja backendille
+    setContent('') // Tyhjennetään kenttä lomakkeen lähettämisen jälkeen
   }
 
   return (
-    <form onSubmit={addAnecdote}>
-      <div>
-      <h2>Create new</h2>
-        <input 
-      name="anecdote" 
-      placeholder='Write your anecdote here'/>
-      </div>
-      <button>Save</button>
-    </form>
+    <div>
+      <h2>Create New Anecdote</h2>
+      <form onSubmit={handleSubmit}>
+        <div>
+          <input
+            type="text"
+            value={content}
+            onChange={(e) => setContent(e.target.value)}
+            placeholder="Type your anecdote here..."
+          />
+        </div>
+        <button type="submit">Save</button>
+      </form>
+    </div>
   )
 }
 

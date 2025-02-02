@@ -8,9 +8,9 @@ const getAll = async () => {
   return response.data
 }
 
-// Luo uuden anekdootin
+// Luo uuden anekdootin backendille
 const createNew = async (content) => {
-  const object = { content, votes: 0 } // Huomaa että 'votes' kenttä pitää olla mukana
+  const object = { content, votes: 0 } // votes pitää olla mukana, koska se on backendin tietokannan kenttä
   const response = await axios.post(baseUrl, object)
   return response.data
 }

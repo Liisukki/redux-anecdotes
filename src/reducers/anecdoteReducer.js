@@ -3,7 +3,6 @@ import anecdotesService from '../services/anecdotes'
 
 const initialState = []
 
-// Anekdoottireduceri
 const anecdoteSlice = createSlice({
   name: 'anecdotes',
   initialState,
@@ -32,7 +31,7 @@ export const initializeAnecdotes = () => {
   }
 }
 
-// Lähetetään uusi anekdootti JSON Serverille
+// Lähetetään uusi anekdootti JSON Serverille ja lisätään se Redux-tilaan
 export const createAnecdote = (content) => {
   return async (dispatch) => {
     const newAnecdote = await anecdotesService.createNew(content)
