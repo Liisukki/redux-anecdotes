@@ -16,6 +16,7 @@ const AnecdoteList = () => {
   return (
     <div>
       {anecdotes
+        .slice() // Luo kopio, jotta sort ei muokkaa alkuperäistä taulukkoa
         .sort((a, b) => b.votes - a.votes)
         .map(anecdote => (
           <div key={anecdote.id}>
