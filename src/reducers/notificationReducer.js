@@ -1,30 +1,38 @@
 import { createSlice } from '@reduxjs/toolkit'
 
-const initialState = ''
+const initialState = { message: '', timeoutId: null }
 
-// createSlice-API notifikaation hallintaan
 const notificationSlice = createSlice({
   name: 'notification',
   initialState,
   reducers: {
     setNotification(state, action) {
+      if (state.timeoutId) {
+        clearTimeout(state.timeoutId) // Poistetaan edellinen aikakatkaisu
+      }
       return action.payload
     },
     clearNotification() {
-      return ''
+      return { message: '', timeoutId: null }
     }
   }
 })
 
 export const { setNotification, clearNotification } = notificationSlice.actions
 
-// Notifikaatio asetaan ja poistetaan viiden sekunnin kuluttua
-export const showNotification = (message, timeout = 5000) => {
-  return async (dispatch) => {
-    dispatch(setNotification(message))
-    setTimeout(() => {
+// Action creator, joka asettaa ja poistaa notifikaation annetun ajan kuluttua
+export const showNotification = (message, duration = 5000) => {
+  return (dispatch, getState) => {
+    const { timeoutId } = getState().notification
+    if (timeoutId) {
+      clearTimeout(timeoutId) // Poistetaan edellinen aikakatkaisu, jos sellainen on
+    }
+
+    const newTimeoutId = setTimeout(() => {
       dispatch(clearNotification())
-    }, timeout)
+    }, duration * 1000)
+
+    dispatch(setNotification({ message, timeoutId: newTimeoutId }))
   }
 }
 

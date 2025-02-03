@@ -1,29 +1,31 @@
 import { useSelector, useDispatch } from 'react-redux'
 import { voteAnecdote } from '../reducers/anecdoteReducer'
+import { showNotification } from '../reducers/notificationReducer'
 
 const AnecdoteList = () => {
   const dispatch = useDispatch()
-  const anecdotes = useSelector(({ anecdotes, filter }) => {
-    return filter
+  const anecdotes = useSelector(({ anecdotes, filter }) =>
+    filter
       ? anecdotes.filter(a => a.content.toLowerCase().includes(filter.toLowerCase()))
       : anecdotes
-  })
+  )
 
-  const vote = (id) => {
-    dispatch(voteAnecdote(id))
+  const vote = (anecdote) => {
+    dispatch(voteAnecdote(anecdote.id))
+    dispatch(showNotification(`You voted '${anecdote.content}'`, 5)) // Notifikaatio 5 sekunniksi
   }
 
   return (
     <div>
       {anecdotes
-        .slice() // Luo kopio, jotta sort ei muokkaa alkuperäistä taulukkoa
+        .slice() // Kopioidaan taulukko ennen sorttaamista
         .sort((a, b) => b.votes - a.votes)
         .map(anecdote => (
           <div key={anecdote.id}>
             <div>{anecdote.content}</div>
             <div>
               has {anecdote.votes}
-              <button onClick={() => vote(anecdote.id)}>Vote</button>
+              <button onClick={() => vote(anecdote)}>Vote</button>
             </div>
           </div>
         ))}
