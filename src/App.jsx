@@ -10,8 +10,8 @@ const App = () => {
   const dispatch = useDispatch()
 
   useEffect(() => {
-    dispatch(initializeAnecdotes()) // Haetaan anekdootit alussa
-  }, [dispatch])
+    dispatch(initializeAnecdotes()) // Haetaan anekdootit backendistä
+  }, [dispatch]) // Lisätään dispatch riippuvuuksiin
 
   return (
     <div>

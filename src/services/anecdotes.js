@@ -10,9 +10,15 @@ const getAll = async () => {
 
 // Luo uuden anekdootin backendille
 const createNew = async (content) => {
-  const object = { content, votes: 0 } // votes pitää olla mukana, koska se on backendin tietokannan kenttä
+  const object = { content, votes: 0 } // votes pitää olla mukana
   const response = await axios.post(baseUrl, object)
   return response.data
 }
 
-export default { getAll, createNew }
+// Päivittää anekdootin äänimäärää
+const updateVotes = async (id, updatedAnecdote) => {
+  const response = await axios.put(`${baseUrl}/${id}`, updatedAnecdote)
+  return response.data
+}
+
+export default { getAll, createNew, updateVotes }
